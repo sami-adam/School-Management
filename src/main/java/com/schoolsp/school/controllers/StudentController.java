@@ -1,8 +1,11 @@
 package com.schoolsp.school.controllers;
 
 import com.schoolsp.school.models.Student;
+import com.schoolsp.school.security.jwt.JwtUtils;
 import com.schoolsp.school.services.StudentService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Null;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -12,7 +15,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/students")
 public class StudentController {
-    private StudentService studentService;
+    private final StudentService studentService;
 
     public StudentController(StudentService studentService) {
         this.studentService = studentService;
@@ -24,8 +27,7 @@ public class StudentController {
     }
 
     @PostMapping("/registerStudent")
-    @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<Student> registerStudent(@Valid @RequestBody Student student){
+    public ResponseEntity<Student> registerStudent(@RequestBody Student student){
         return ResponseEntity.ok(studentService.registerStudent(student));
     }
 }
