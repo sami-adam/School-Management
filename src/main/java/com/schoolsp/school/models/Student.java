@@ -1,6 +1,7 @@
 package com.schoolsp.school.models;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.Formula;
 
 import java.util.Date;
 
@@ -10,6 +11,9 @@ public class Student {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Transient
+    private String email;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -27,6 +31,16 @@ public class Student {
     @ManyToOne
     @JoinColumn(name = "school_id")
     private School school;
+    public Student(){}
+
+    public Student(String email, User user, String fullName, Date dateOfBirth, Grade grade, School school) {
+        this.email = email;
+        this.user = user;
+        this.fullName = fullName;
+        this.dateOfBirth = dateOfBirth;
+        this.grade = grade;
+        this.school = school;
+    }
 
     public Long getId() {
         return id;
@@ -74,5 +88,13 @@ public class Student {
 
     public void setSchool(School school) {
         this.school = school;
+    }
+
+    public String getEmail() {
+        try {
+            return user.getEmail();
+        } catch (NullPointerException e) {
+            return email;
+        }
     }
 }
